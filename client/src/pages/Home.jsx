@@ -5,11 +5,48 @@ import { fetchServices } from '../api/services';
 import { formatPrice } from '../utils/helpers';
 import styles from './Home.module.css';
 
-export default function Home() {
-  const { data: barbers = [] } = useQuery({ queryKey: ['barbers'], queryFn: fetchBarbers });
-  const { data: services = [] } = useQuery({ queryKey: ['services'], queryFn: fetchServices });
+const FALLBACK_SERVICES = [
+  {
+    _id: 'f1',
+    name: 'Classic Haircut',
+    category: 'haircut',
+    description: 'Precision cut tailored to your style with a hot towel finish.',
+    duration: 45,
+    pricing: { junior: 3000, senior: 4500, master: 6000 },
+  },
+  {
+    _id: 'f2',
+    name: 'Straight Razor Shave',
+    category: 'beard',
+    description: 'Traditional hot-lather straight-razor shave with skin treatment.',
+    duration: 60,
+    pricing: { junior: 2500, senior: 3500, master: 4500 },
+  },
+  {
+    _id: 'f3',
+    name: 'Atelier VIP Experience',
+    category: 'haircut',
+    description: 'Full grooming ritual – cut, scalp treatment, styling, and hot towel.',
+    duration: 90,
+    pricing: { junior: 6500, senior: 8500, master: 11000 },
+  },
+];
 
-  const featured = services.slice(0, 3);
+const FALLBACK_BARBERS = [
+  { _id: 'b1', name: 'Viktor S.', title: 'Master Barber', bio: 'Over 15 years of precision cutting and traditional straight-razor shaving.' },
+  { _id: 'b2', name: 'Martin K.', title: 'Senior Stylist', bio: 'Specialist in modern scissor techniques and textured finishes.' },
+  { _id: 'b3', name: 'Daniel T.', title: 'Senior Stylist', bio: 'Expert in beard sculpting and classic barbershop services.' },
+  { _id: 'b4', name: 'Alexander D.', title: 'Barber', bio: 'Dedicated to clean lines and contemporary styles.' },
+];
+
+const CATEGORY_LABELS = { haircut: 'Haircut', beard: 'Beard Care', facial: 'Facial' };
+
+export default function Home() {
+  const { data: barbers } = useQuery({ queryKey: ['barbers'], queryFn: fetchBarbers });
+  const { data: services } = useQuery({ queryKey: ['services'], queryFn: fetchServices });
+
+  const featured = (services?.length ? services : FALLBACK_SERVICES).slice(0, 3);
+  const teamList = barbers?.length ? barbers : FALLBACK_BARBERS;
 
   return (
     <>
@@ -46,7 +83,7 @@ export default function Home() {
             {featured.map((svc) => (
               <div key={svc._id} className={`card-gilded ${styles.serviceCard}`}>
                 <p className="label" style={{ color: 'var(--color-on-surface-variant)' }}>
-                  {svc.category}
+                  {CATEGORY_LABELS[svc.category] ?? svc.category}
                 </p>
                 <h3 className={styles.serviceTitle}>{svc.name}</h3>
                 <p className={styles.serviceDesc}>{svc.description}</p>
@@ -73,7 +110,7 @@ export default function Home() {
             <h2 className={styles.sectionTitle}>Master Barbers</h2>
           </div>
           <div className={styles.barbersGrid}>
-            {barbers.map((b) => (
+            {teamList.map((b) => (
               <div key={b._id} className={styles.barberCard}>
                 <div className={styles.barberAvatar}>
                   {b.image ? (
