@@ -14,6 +14,12 @@ const CATEGORIES = [
 
 const TIER_LABELS = { junior: 'Junior', senior: 'Senior', master: 'Master' };
 
+const CATEGORY_NAMES = {
+  haircut: 'Haircuts',
+  beard:   'Beard Care',
+  facial:  'Facial Treatments',
+};
+
 export default function Services() {
   const [activeCategory, setActiveCategory] = useState('');
 
@@ -74,7 +80,7 @@ export default function Services() {
             Object.entries(grouped).map(([category, items]) => (
               <div key={category} className={styles.categoryBlock}>
                 <h2 className={styles.categoryTitle}>
-                  {category.charAt(0).toUpperCase() + category.slice(1)}
+                  {CATEGORY_NAMES[category] ?? category}
                 </h2>
                 <div className={styles.serviceTable}>
                   {/* Header */}
