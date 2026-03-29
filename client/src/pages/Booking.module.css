@@ -1,0 +1,303 @@
+.page {
+  padding-top: 72px;
+  min-height: 100vh;
+  background: var(--color-bg);
+}
+
+/* ── Stepper ─────────────────────────────────────────────────────────── */
+.stepper {
+  display: flex;
+  align-items: center;
+  background: var(--color-surface-lowest);
+  border-bottom: var(--gilding);
+  padding: var(--sp-6) var(--sp-6);
+  overflow-x: auto;
+}
+
+.stepItem {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-shrink: 0;
+}
+
+.stepNum {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--color-surface-highest);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: var(--color-on-surface-variant);
+  transition: all var(--t-fast);
+}
+
+.stepLabel {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-on-surface-variant);
+  transition: color var(--t-fast);
+  white-space: nowrap;
+}
+
+.stepLine {
+  display: block;
+  width: 40px;
+  height: 1px;
+  background: var(--color-surface-highest);
+  margin-inline: var(--sp-3);
+  flex-shrink: 0;
+}
+
+.stepActive .stepNum {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-on-primary);
+}
+.stepActive .stepLabel { color: var(--color-on-bg); }
+
+.stepDone .stepNum {
+  background: var(--color-primary-container);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+.stepDone .stepLabel { color: var(--color-on-surface); }
+
+/* ── Layout ──────────────────────────────────────────────────────────── */
+.layout {
+  max-width: var(--max-w);
+  margin-inline: auto;
+  padding: var(--sp-12) var(--sp-6);
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: var(--sp-10);
+  align-items: start;
+}
+
+/* ── Step panel ──────────────────────────────────────────────────────── */
+.stepHeader {
+  margin-bottom: var(--sp-8);
+}
+.backBtn {
+  font-size: 0.75rem;
+  margin-bottom: var(--sp-3);
+  padding: 0;
+}
+.stepTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--color-on-bg);
+}
+
+/* ── Select cards ────────────────────────────────────────────────────── */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--sp-3);
+}
+
+.selectCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-6);
+  background: var(--color-surface-low);
+  border: 1px solid var(--color-surface-high);
+  text-align: left;
+  transition: all var(--t-fast);
+}
+.selectCard:hover { border-color: var(--color-on-surface-variant); }
+.selectCard.selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary-container);
+  border-top: var(--gilding);
+}
+
+.cardTitle {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-on-bg);
+}
+
+.cardMeta {
+  font-size: 0.8125rem;
+  color: var(--color-on-surface-variant);
+}
+
+/* Barber card specifics */
+.barberRow {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+.barberAvatar {
+  width: 40px;
+  height: 40px;
+  background: var(--color-surface-highest);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  color: var(--color-on-surface-variant);
+  flex-shrink: 0;
+}
+.tierPrice {
+  font-size: 1.125rem;
+  color: var(--color-primary);
+  font-weight: 500;
+  margin-top: auto;
+  padding-top: var(--sp-3);
+}
+
+/* ── Date picker ─────────────────────────────────────────────────────── */
+.dateGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-8);
+}
+
+.dateBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--sp-3) var(--sp-2);
+  background: var(--color-surface-low);
+  border: 1px solid var(--color-surface-high);
+  transition: all var(--t-fast);
+}
+.dateBtn:hover { border-color: var(--color-on-surface-variant); }
+.dateBtn.selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary-container);
+}
+
+.dateDow { font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-on-surface-variant); }
+.dateDay { font-family: var(--font-serif); font-size: 1.375rem; color: var(--color-on-bg); }
+.dateMon { font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-on-surface-variant); }
+
+.slotHeading {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-on-surface-variant);
+  margin-bottom: var(--sp-4);
+}
+.slotGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+.slotBtn {
+  padding: var(--sp-2) var(--sp-5);
+  background: var(--color-surface-low);
+  border: 1px solid var(--color-surface-high);
+  font-size: 0.8125rem;
+  color: var(--color-on-bg);
+  transition: all var(--t-fast);
+}
+.slotBtn:hover { border-color: var(--color-on-surface-variant); }
+.slotBtn.selected {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+/* ── Confirm form ────────────────────────────────────────────────────── */
+.confirmForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  max-width: 480px;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────────────── */
+.summary {
+  background: var(--color-surface-low);
+  border-top: var(--gilding);
+  padding: var(--sp-8);
+  position: sticky;
+  top: calc(72px + var(--sp-6));
+}
+.summaryTitle {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-primary);
+  margin-bottom: var(--sp-6);
+}
+.summaryTotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-top: var(--sp-5);
+  margin-top: var(--sp-2);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-on-surface-variant);
+}
+.summaryPrice {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  font-weight: 300;
+}
+
+/* ── Confirmation screen ─────────────────────────────────────────────── */
+.confirmPage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-6);
+  background: var(--color-bg);
+  padding-top: 72px;
+}
+.confirmCard {
+  background: var(--color-surface-low);
+  border-top: var(--gilding);
+  padding: var(--sp-16) var(--sp-12);
+  max-width: 480px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--sp-4);
+}
+.confirmIcon {
+  width: 56px;
+  height: 56px;
+  border: 1px solid var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  margin-bottom: var(--sp-4);
+}
+.confirmTitle {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--color-on-bg);
+}
+.confirmSub {
+  color: var(--color-on-surface-variant);
+  font-size: 0.9375rem;
+}
+.confirmDetails {
+  width: 100%;
+  margin: var(--sp-6) 0;
+}
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .summary { position: static; }
+}

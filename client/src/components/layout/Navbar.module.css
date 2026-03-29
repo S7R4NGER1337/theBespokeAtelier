@@ -1,0 +1,101 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  transition: background var(--t-base), border-color var(--t-base);
+  border-bottom: 1px solid transparent;
+}
+
+.header.scrolled {
+  background: var(--nav-bg);
+  backdrop-filter: var(--nav-blur);
+  -webkit-backdrop-filter: var(--nav-blur);
+  border-bottom-color: var(--color-surface-high);
+}
+
+.inner {
+  max-width: var(--max-w);
+  margin-inline: auto;
+  padding-inline: var(--sp-6);
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-8);
+}
+
+.logo {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--color-primary);
+  white-space: nowrap;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+}
+
+.link {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-on-surface-variant);
+  transition: color var(--t-fast);
+}
+.link:hover, .link.active {
+  color: var(--color-on-bg);
+}
+
+.cta {
+  margin-left: var(--sp-4);
+}
+
+/* Burger */
+.burger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: var(--sp-2);
+}
+.bar {
+  display: block;
+  width: 22px;
+  height: 1px;
+  background: var(--color-on-bg);
+  transition: transform var(--t-base), opacity var(--t-fast);
+}
+.barOpen1 { transform: translateY(6px) rotate(45deg); }
+.barOpen2 { opacity: 0; }
+.barOpen3 { transform: translateY(-6px) rotate(-45deg); }
+
+@media (max-width: 768px) {
+  .burger { display: flex; }
+
+  .nav {
+    position: fixed;
+    inset: 72px 0 0 0;
+    background: var(--color-surface-lowest);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--sp-8);
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform var(--t-base), opacity var(--t-base);
+  }
+  .navOpen {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
+  }
+  .link { font-size: 1rem; }
+  .cta { margin-left: 0; margin-top: var(--sp-4); }
+}
