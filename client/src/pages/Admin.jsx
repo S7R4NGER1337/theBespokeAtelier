@@ -170,12 +170,11 @@ function Dashboard() {
 
 /* ────────────────────────────────────────────────────── Appointments */
 function Appointments() {
-  const [dateFilter, setDateFilter] = useState(format(new Date(), 'yyyy-MM-dd'));
-  const qc = useQueryClient();
+  const [dateFilter, setDateFilter] = useState('');
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['appointments', { date: dateFilter }],
-    queryFn: () => fetchAppointments({ date: dateFilter, limit: 50 }),
+    queryFn: () => fetchAppointments({ date: dateFilter || undefined, limit: 100 }),
   });
 
   const appointments = data?.data || [];
@@ -193,8 +192,14 @@ function Appointments() {
       </div>
       {isLoading ? (
         <p className="caption">Loading…</p>
+      ) : isError ? (
+        <p className="caption" style={{ padding: 'var(--sp-8) 0', color: 'var(--color-error, #c0392b)' }}>
+          Failed to load appointments. Check your connection or log in again.
+        </p>
       ) : appointments.length === 0 ? (
-        <p className="caption" style={{ padding: 'var(--sp-8) 0' }}>No appointments for this date.</p>
+        <p className="caption" style={{ padding: 'var(--sp-8) 0' }}>
+          {dateFilter ? 'No appointments for this date.' : 'No appointments yet.'}
+        </p>
       ) : (
         <AppointmentList appointments={appointments} editable />
       )}

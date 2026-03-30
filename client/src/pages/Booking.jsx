@@ -31,8 +31,8 @@ export default function Booking() {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [confirmed, setConfirmed] = useState(false);
 
-  const { data: services = [] } = useQuery({ queryKey: ['services'], queryFn: fetchServices });
-  const { data: barbers = [] } = useQuery({ queryKey: ['barbers'], queryFn: fetchBarbers });
+  const { data: services = [], isError: servicesError } = useQuery({ queryKey: ['services'], queryFn: () => fetchServices() });
+  const { data: barbers = [], isError: barbersError } = useQuery({ queryKey: ['barbers'], queryFn: fetchBarbers });
 
   const dateStr = selectedDate ? format(selectedDate, 'yyyy-MM-dd') : null;
   const { data: slots = [] } = useQuery({
@@ -92,6 +92,16 @@ export default function Booking() {
             Back to Home
           </button>
         </div>
+      </div>
+    );
+  }
+
+  if (servicesError || barbersError) {
+    return (
+      <div className={styles.page} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+        <p className="caption" style={{ textAlign: 'center' }}>
+          Unable to load booking data. Please check that the server is running and try again.
+        </p>
       </div>
     );
   }

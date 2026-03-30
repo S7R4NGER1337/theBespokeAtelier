@@ -12,9 +12,9 @@ exports.getAppointments = async (req, res, next) => {
 
     const filter = {};
     if (req.query.date) {
-      const d = new Date(req.query.date);
-      const start = new Date(d.setHours(0, 0, 0, 0));
-      const end = new Date(d.setHours(23, 59, 59, 999));
+      const [y, m, d] = req.query.date.split('-').map(Number);
+      const start = new Date(Date.UTC(y, m - 1, d, 0, 0, 0, 0));
+      const end = new Date(Date.UTC(y, m - 1, d, 23, 59, 59, 999));
       filter.date = { $gte: start, $lte: end };
     }
     if (req.query.barber) filter.barber = req.query.barber;
@@ -49,26 +49,39 @@ exports.getAvailableSlots = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'barberId and date required' });
     }
 
-    const d = new Date(date);
-    const start = new Date(d.setHours(0, 0, 0, 0));
-    const end = new Date(d.setHours(23, 59, 59, 999));
+    const [y, m, dv] = date.split('-').map(Number);
+    const start = new Date(Date.UTC(y, m - 1, dv, 0, 0, 0, 0));
+    const end = new Date(Date.UTC(y, m - 1, dv, 23, 59, 59, 999));
 
     const booked = await Appointment.find({
       barber: barberId,
       date: { $gte: start, $lte: end },
       status: { $nin: ['cancelled', 'no_show'] },
-    }).select('timeSlot');
+    }).select('timeSlot').populate('service', 'duration');
 
-    const bookedSlots = booked.map((a) => a.timeSlot);
+    // Block the booked slot AND every 30-min slot that falls within its service duration.
+    // e.g. haircut (45 min) at 09:00 → blocks 09:00 and 09:30 (barber free at 09:45).
+    const blockedMinutes = new Set();
+    for (const a of booked) {
+      const [hh, mm] = a.timeSlot.split(':').map(Number);
+      const startMin = hh * 60 + mm;
+      const duration = a.service?.duration ?? 30;
+      for (let t = startMin; t < startMin + duration; t += 30) {
+        blockedMinutes.add(t);
+      }
+    }
 
     // Generate slots 09:00–18:30 every 30 minutes
     const allSlots = [];
     for (let h = 9; h < 19; h++) {
       allSlots.push(`${String(h).padStart(2, '0')}:00`);
-      if (h < 18) allSlots.push(`${String(h).padStart(2, '0')}:30`);
+      if (h <= 18) allSlots.push(`${String(h).padStart(2, '0')}:30`);
     }
 
-    const available = allSlots.filter((s) => !bookedSlots.includes(s));
+    const available = allSlots.filter((s) => {
+      const [hh, mm] = s.split(':').map(Number);
+      return !blockedMinutes.has(hh * 60 + mm);
+    });
     res.json({ success: true, data: available });
   } catch (err) {
     next(err);

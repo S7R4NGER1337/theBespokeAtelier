@@ -43,7 +43,7 @@ const CATEGORY_LABELS = { haircut: 'Haircut', beard: 'Beard Care', facial: 'Faci
 
 export default function Home() {
   const { data: barbers } = useQuery({ queryKey: ['barbers'], queryFn: fetchBarbers });
-  const { data: services } = useQuery({ queryKey: ['services'], queryFn: fetchServices });
+  const { data: services } = useQuery({ queryKey: ['services'], queryFn: () => fetchServices() });
 
   const featured = (services?.length ? services : FALLBACK_SERVICES).slice(0, 3);
   const teamList = barbers?.length ? barbers : FALLBACK_BARBERS;
