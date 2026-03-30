@@ -23,9 +23,15 @@
   padding-bottom: var(--sp-24);
 }
 
+@keyframes heroIn {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .eyebrow {
   color: var(--color-primary);
   margin-bottom: var(--sp-5);
+  animation: heroIn 0.7s ease 0.1s both;
 }
 
 .headline {
@@ -36,6 +42,7 @@
   letter-spacing: -0.02em;
   color: var(--color-on-bg);
   margin-bottom: var(--sp-6);
+  animation: heroIn 0.7s ease 0.25s both;
 }
 .headline em {
   font-style: italic;
@@ -47,12 +54,20 @@
   color: var(--color-on-surface-variant);
   max-width: 480px;
   margin-bottom: var(--sp-10);
+  animation: heroIn 0.7s ease 0.4s both;
 }
 
 .heroCta {
   display: flex;
   gap: var(--sp-4);
   flex-wrap: wrap;
+  animation: heroIn 0.7s ease 0.55s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eyebrow, .headline, .sub, .heroCta {
+    animation: none;
+  }
 }
 
 .heroScroll {
@@ -202,10 +217,17 @@
 
 /* ── CTA banner ────────────────────────────────────────────────────────── */
 .ctaBanner {
-  padding-block: var(--sp-24);
+  padding-block: var(--sp-16);
   background: var(--color-surface-lowest);
-  border-top: var(--gilding);
   text-align: center;
+}
+
+.ctaInner {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  border-top: var(--gilding);
+  padding-top: var(--sp-8);
 }
 
 .ctaTitle {

@@ -5,7 +5,6 @@ import styles from './Navbar.module.css';
 const NAV_LINKS = [
   { to: '/', label: 'Home' },
   { to: '/services', label: 'Services' },
-  { to: '/booking', label: 'Book Now' },
 ];
 
 export default function Navbar() {

@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchBarbers } from '../api/barbers';
 import { fetchServices } from '../api/services';
 import { formatPrice } from '../utils/helpers';
+import useInView from '../hooks/useInView';
 import styles from './Home.module.css';
 
 const FALLBACK_SERVICES = [
@@ -48,6 +49,12 @@ export default function Home() {
   const featured = (services?.length ? services : FALLBACK_SERVICES).slice(0, 3);
   const teamList = barbers?.length ? barbers : FALLBACK_BARBERS;
 
+  const [servHeadRef, servHeadInView] = useInView();
+  const [servGridRef, servGridInView] = useInView();
+  const [barbHeadRef, barbHeadInView] = useInView();
+  const [barbGridRef, barbGridInView] = useInView();
+  const [ctaRef, ctaInView] = useInView();
+
   return (
     <>
       {/* ── Hero ─────────────────────────────────────────────────── */}
@@ -75,13 +82,20 @@ export default function Home() {
       {/* ── Services preview ──────────────────────────────────────── */}
       <section className={`section ${styles.servicesSection}`}>
         <div className="container">
-          <div className={styles.sectionHead}>
+          <div
+            ref={servHeadRef}
+            className={`${styles.sectionHead} fade-up${servHeadInView ? ' in-view' : ''}`}
+          >
             <p className="label" style={{ color: 'var(--color-primary)' }}>Our Craft</p>
             <h2 className={styles.sectionTitle}>Services</h2>
           </div>
-          <div className={styles.servicesGrid}>
-            {featured.map((svc) => (
-              <div key={svc._id} className={`card-gilded ${styles.serviceCard}`}>
+          <div ref={servGridRef} className={styles.servicesGrid}>
+            {featured.map((svc, i) => (
+              <div
+                key={svc._id}
+                className={`card-gilded ${styles.serviceCard} fade-up${servGridInView ? ' in-view' : ''}`}
+                style={{ transitionDelay: servGridInView ? `${i * 0.12}s` : '0s' }}
+              >
                 <p className="label" style={{ color: 'var(--color-on-surface-variant)' }}>
                   {CATEGORY_LABELS[svc.category] ?? svc.category}
                 </p>
@@ -105,13 +119,20 @@ export default function Home() {
       {/* ── Barbers ───────────────────────────────────────────────── */}
       <section className={`section ${styles.barbersSection}`}>
         <div className="container">
-          <div className={styles.sectionHead}>
+          <div
+            ref={barbHeadRef}
+            className={`${styles.sectionHead} fade-up${barbHeadInView ? ' in-view' : ''}`}
+          >
             <p className="label" style={{ color: 'var(--color-primary)' }}>The Team</p>
             <h2 className={styles.sectionTitle}>Master Barbers</h2>
           </div>
-          <div className={styles.barbersGrid}>
-            {teamList.map((b) => (
-              <div key={b._id} className={styles.barberCard}>
+          <div ref={barbGridRef} className={styles.barbersGrid}>
+            {teamList.map((b, i) => (
+              <div
+                key={b._id}
+                className={`${styles.barberCard} fade-up${barbGridInView ? ' in-view' : ''}`}
+                style={{ transitionDelay: barbGridInView ? `${i * 0.1}s` : '0s' }}
+              >
                 <div className={styles.barberAvatar}>
                   {b.image ? (
                     <img src={b.image} alt={b.name} />
@@ -137,12 +158,17 @@ export default function Home() {
       {/* ── CTA banner ───────────────────────────────────────────── */}
       <section className={styles.ctaBanner}>
         <div className="container">
-          <h2 className={styles.ctaTitle}>
-            It's time for your<br /><em>new look</em>
-          </h2>
-          <Link to="/booking" className="btn btn-primary" style={{ marginTop: 'var(--sp-8)' }}>
-            Book Now
-          </Link>
+          <div
+            ref={ctaRef}
+            className={`${styles.ctaInner} fade-up${ctaInView ? ' in-view' : ''}`}
+          >
+            <h2 className={styles.ctaTitle}>
+              It's time for your<br /><em>new look</em>
+            </h2>
+            <Link to="/booking" className="btn btn-primary" style={{ marginTop: 'var(--sp-8)' }}>
+              Book Now
+            </Link>
+          </div>
         </div>
       </section>
     </>
