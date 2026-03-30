@@ -31,8 +31,8 @@ export default function Booking() {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [confirmed, setConfirmed] = useState(false);
 
-  const { data: services = [], isError: servicesError } = useQuery({ queryKey: ['services'], queryFn: () => fetchServices() });
-  const { data: barbers = [], isError: barbersError } = useQuery({ queryKey: ['barbers'], queryFn: fetchBarbers });
+  const { data: services = [], isError: servicesError, refetch: refetchServices } = useQuery({ queryKey: ['services'], queryFn: () => fetchServices() });
+  const { data: barbers = [], isError: barbersError, refetch: refetchBarbers } = useQuery({ queryKey: ['barbers'], queryFn: fetchBarbers });
 
   const dateStr = selectedDate ? format(selectedDate, 'yyyy-MM-dd') : null;
   const { data: slots = [] } = useQuery({
@@ -98,10 +98,13 @@ export default function Booking() {
 
   if (servicesError || barbersError) {
     return (
-      <div className={styles.page} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+      <div className={styles.page} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', gap: 'var(--sp-6)' }}>
         <p className="caption" style={{ textAlign: 'center' }}>
           Unable to load booking data. Please check that the server is running and try again.
         </p>
+        <button className="btn btn-outline" onClick={() => { refetchServices(); refetchBarbers(); }}>
+          Try Again
+        </button>
       </div>
     );
   }

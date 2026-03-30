@@ -15,5 +15,8 @@ export const createAppointment = (body) =>
 export const updateAppointmentStatus = (id, status, cancelReason) =>
   api.patch(`/appointments/${id}/status`, { status, cancelReason }).then((r) => r.data.data);
 
+export const deleteAppointment = (id) =>
+  api.delete(`/appointments/${id}`).then((r) => r.data);
+
 export const fetchStats = () =>
   api.get('/appointments/stats').then((r) => r.data.data);

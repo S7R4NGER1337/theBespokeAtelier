@@ -9,6 +9,7 @@ const {
   getAvailableSlots,
   createAppointment,
   updateStatus,
+  deleteAppointment,
   getStats,
 } = require('../controllers/appointmentController');
 
@@ -44,6 +45,8 @@ router.use(protect, restrictTo('admin'));
 router.get('/stats', getStats);
 router.get('/', getAppointments);
 router.get('/:id', param('id').isMongoId(), validate, getAppointment);
+router.delete('/:id', param('id').isMongoId(), validate, deleteAppointment);
+
 router.patch(
   '/:id/status',
   param('id').isMongoId(),

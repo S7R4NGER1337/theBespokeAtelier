@@ -188,6 +188,19 @@ exports.updateStatus = async (req, res, next) => {
   }
 };
 
+// DELETE /api/appointments/:id  (admin)
+exports.deleteAppointment = async (req, res, next) => {
+  try {
+    const appt = await Appointment.findByIdAndDelete(req.params.id);
+    if (!appt) {
+      return res.status(404).json({ success: false, message: 'Appointment not found' });
+    }
+    res.json({ success: true, message: 'Appointment deleted' });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // GET /api/appointments/stats  (admin)
 exports.getStats = async (req, res, next) => {
   try {

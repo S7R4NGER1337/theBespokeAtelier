@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route, NavLink, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { useAuth } from '../context/AuthContext';
-import { fetchStats, fetchAppointments, updateAppointmentStatus } from '../api/appointments';
+import { fetchStats, fetchAppointments, updateAppointmentStatus, deleteAppointment } from '../api/appointments';
 import { fetchClients } from '../api/clients';
 import { formatPrice, statusChip, titleCase } from '../utils/helpers';
 import styles from './Admin.module.css';
@@ -277,7 +277,8 @@ function StatCard({ label, value, sub, accent }) {
 
 function AppointmentList({ appointments, editable }) {
   const qc = useQueryClient();
-  const mutation = useMutation({
+
+  const statusMutation = useMutation({
     mutationFn: ({ id, status }) => updateAppointmentStatus(id, status),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['appointments'] });
@@ -285,13 +286,29 @@ function AppointmentList({ appointments, editable }) {
     },
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: (id) => deleteAppointment(id),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['appointments'] });
+      qc.invalidateQueries({ queryKey: ['stats'] });
+    },
+  });
+
+  const handleChange = (a, value) => {
+    if (value === '__delete__') {
+      deleteMutation.mutate(a._id);
+    } else {
+      statusMutation.mutate({ id: a._id, status: value });
+    }
+  };
+
   return (
     <div className={styles.apptList}>
       {appointments.map((a) => (
         <div key={a._id} className={styles.apptRow}>
           <div className={styles.apptTime}>
-            <span>{a.timeSlot}</span>
-            <span className="caption">{a.service?.duration} min</span>
+            <span>{format(parseISO(a.date.slice(0, 10)), 'd MMM')}</span>
+            <span className="caption">{a.timeSlot} · {a.service?.duration} min</span>
           </div>
           <div className={styles.apptInfo}>
             <p className={styles.apptClient}>{a.client?.name}</p>
@@ -303,12 +320,14 @@ function AppointmentList({ appointments, editable }) {
             <select
               className={styles.statusSelect}
               value={a.status}
-              onChange={(e) => mutation.mutate({ id: a._id, status: e.target.value })}
+              onChange={(e) => handleChange(a, e.target.value)}
               aria-label="Update status"
             >
               {['pending', 'confirmed', 'in_progress', 'completed', 'cancelled', 'no_show'].map((s) => (
                 <option key={s} value={s}>{titleCase(s)}</option>
               ))}
+              <option disabled>──────────</option>
+              <option value="__delete__">Delete</option>
             </select>
           )}
         </div>
