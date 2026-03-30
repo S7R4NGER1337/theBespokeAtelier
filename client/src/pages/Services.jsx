@@ -121,15 +121,19 @@ export default function Services() {
       </section>
 
       {/* CTA */}
-      <section
-        ref={ctaRef}
-        className={`${styles.cta} fade-up${ctaInView ? ' in-view' : ''}`}
-      >
-        <div className="container" style={{ textAlign: 'center' }}>
-          <h2 className={styles.ctaTitle}>Ready for a transformation?</h2>
-          <div className={styles.ctaBtns}>
-            <Link to="/booking" className="btn btn-primary">Book Now</Link>
-            <a href="tel:+442071234567" className="btn btn-outline">Contact Us</a>
+      <section className={styles.cta}>
+        <div className="container">
+          <div
+            ref={ctaRef}
+            className={`${styles.ctaInner} fade-up${ctaInView ? ' in-view' : ''}`}
+          >
+            <h2 className={styles.ctaTitle}>
+              Ready for your<br /><em>transformation?</em>
+            </h2>
+            <div className={styles.ctaBtns}>
+              <Link to="/booking" className="btn btn-primary">Book Now</Link>
+              <a href="tel:+442071234567" className="btn btn-outline">Contact Us</a>
+            </div>
           </div>
         </div>
       </section>

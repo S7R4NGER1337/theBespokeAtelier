@@ -138,23 +138,35 @@
 
 /* CTA */
 .cta {
-  padding-block: var(--sp-20);
+  padding-block: var(--sp-16);
   background: var(--color-surface-lowest);
+  text-align: center;
+}
+.ctaInner {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
   border-top: var(--gilding);
+  padding-top: var(--sp-8);
 }
 .ctaTitle {
   font-family: var(--font-serif);
-  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
   font-weight: 300;
   letter-spacing: -0.02em;
   color: var(--color-on-bg);
-  margin-bottom: var(--sp-8);
+  line-height: 1.1;
+}
+.ctaTitle em {
+  font-style: italic;
+  color: var(--color-primary);
 }
 .ctaBtns {
   display: flex;
   gap: var(--sp-4);
   justify-content: center;
   flex-wrap: wrap;
+  margin-top: var(--sp-8);
 }
 
 @media (max-width: 640px) {

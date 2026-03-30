@@ -5,6 +5,7 @@ import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import LoadingSpinner from './components/common/LoadingSpinner';
 import ProtectedRoute from './components/common/ProtectedRoute';
+import ScrollManager from './components/common/ScrollManager';
 
 const Home = lazy(() => import('./pages/Home'));
 const Services = lazy(() => import('./pages/Services'));
@@ -27,6 +28,7 @@ export default function App() {
 
   return (
     <Suspense fallback={<LoadingSpinner fullscreen />}>
+      <ScrollManager />
       <Routes>
         {/* Public */}
         <Route
