@@ -12,6 +12,7 @@
   border-bottom: var(--gilding);
   padding: var(--sp-6) var(--sp-6);
   overflow-x: auto;
+  animation: fadeIn 0.5s ease both;
 }
 
 .stepItem {
@@ -77,6 +78,10 @@
 }
 
 /* ── Step panel ──────────────────────────────────────────────────────── */
+.stepContent {
+  animation: slideInRight 0.32s ease both;
+}
+
 .stepHeader {
   margin-bottom: var(--sp-8);
 }
@@ -270,6 +275,7 @@
   align-items: center;
   text-align: center;
   gap: var(--sp-4);
+  animation: fadeUpIn 0.6s ease both;
 }
 .confirmIcon {
   width: 56px;

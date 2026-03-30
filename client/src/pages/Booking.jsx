@@ -278,7 +278,7 @@ export default function Booking() {
 
 function StepPanel({ title, children, onBack }) {
   return (
-    <div>
+    <div className={styles.stepContent}>
       <div className={styles.stepHeader}>
         {onBack && (
           <button className={`btn btn-ghost ${styles.backBtn}`} onClick={onBack}>

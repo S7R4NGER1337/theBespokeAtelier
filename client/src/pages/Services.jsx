@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { fetchServices } from '../api/services';
 import { formatPrice } from '../utils/helpers';
+import useInView from '../hooks/useInView';
 import styles from './Services.module.css';
 
 const CATEGORIES = [
@@ -28,6 +29,9 @@ export default function Services() {
     queryFn: () => fetchServices(activeCategory || undefined),
   });
 
+  const [sectionRef, sectionInView] = useInView();
+  const [ctaRef, ctaInView] = useInView();
+
   // Group by category for display
   const grouped = services.reduce((acc, s) => {
     (acc[s.category] = acc[s.category] || []).push(s);
@@ -39,7 +43,7 @@ export default function Services() {
       {/* Hero */}
       <section className={styles.hero}>
         <div className="container">
-          <p className="label" style={{ color: 'var(--color-primary)' }}>Pricing</p>
+          <p className={`label ${styles.heroEyebrow}`} style={{ color: 'var(--color-primary)' }}>Pricing</p>
           <h1 className={styles.headline}>Services &amp; Pricing</h1>
           <p className={styles.sub}>
             Every service is priced by tier – Junior, Senior, or Master – so you choose
@@ -49,7 +53,7 @@ export default function Services() {
       </section>
 
       {/* Tier legend */}
-      <div className={`container ${styles.tierLegend}`}>
+      <div className={`container ${styles.tierLegend} ${styles.tierLegendWrap}`}>
         {Object.entries(TIER_LABELS).map(([tier, label]) => (
           <div key={tier} className={styles.tierPill}>
             <span className={`${styles.tierDot} ${styles[`dot_${tier}`]}`} />
@@ -59,7 +63,7 @@ export default function Services() {
       </div>
 
       {/* Filter tabs */}
-      <div className={`container ${styles.filterRow}`}>
+      <div className={`container ${styles.filterRow} ${styles.filterRowWrap}`}>
         {CATEGORIES.map((c) => (
           <button
             key={c.value}
@@ -72,13 +76,17 @@ export default function Services() {
       </div>
 
       {/* Services */}
-      <section className="section" style={{ paddingTop: 'var(--sp-10)' }}>
+      <section ref={sectionRef} className="section" style={{ paddingTop: 'var(--sp-10)' }}>
         <div className="container">
           {isLoading ? (
             <p className="caption" style={{ textAlign: 'center', padding: 'var(--sp-16) 0' }}>Loading…</p>
           ) : (
-            Object.entries(grouped).map(([category, items]) => (
-              <div key={category} className={styles.categoryBlock}>
+            Object.entries(grouped).map(([category, items], i) => (
+              <div
+                key={category}
+                className={`${styles.categoryBlock} fade-up${sectionInView ? ' in-view' : ''}`}
+                style={{ transitionDelay: sectionInView ? `${i * 0.15}s` : '0s' }}
+              >
                 <h2 className={styles.categoryTitle}>
                   {CATEGORY_NAMES[category] ?? category}
                 </h2>
@@ -113,7 +121,10 @@ export default function Services() {
       </section>
 
       {/* CTA */}
-      <section className={styles.cta}>
+      <section
+        ref={ctaRef}
+        className={`${styles.cta} fade-up${ctaInView ? ' in-view' : ''}`}
+      >
         <div className="container" style={{ textAlign: 'center' }}>
           <h2 className={styles.ctaTitle}>Ready for a transformation?</h2>
           <div className={styles.ctaBtns}>
