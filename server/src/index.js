@@ -41,9 +41,14 @@ app.use(
 );
 
 // CORS – whitelist only the frontend origin
+const allowedOrigin = process.env.CLIENT_URL;
+if (!allowedOrigin) {
+  console.error('FATAL: CLIENT_URL environment variable is not set');
+  process.exit(1);
+}
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: allowedOrigin,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -80,7 +85,7 @@ app.use('/api/clients', clientRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ success: true, status: 'ok', env: process.env.NODE_ENV });
+  res.json({ success: true, status: 'ok' });
 });
 
 // 404
@@ -102,4 +107,14 @@ process.on('SIGTERM', () => {
     console.log('Server closed gracefully');
     process.exit(0);
   });
+});
+
+process.on('unhandledRejection', (reason) => {
+  console.error('Unhandled promise rejection:', reason);
+  server.close(() => process.exit(1));
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught exception:', err);
+  server.close(() => process.exit(1));
 });

@@ -3,6 +3,12 @@
  * Creates default admin user, barbers, and services.
  */
 require('dotenv').config({ path: require('path').resolve(__dirname, '../../.env') });
+
+if (process.env.NODE_ENV === 'production') {
+  console.error('ERROR: seed script must not run in production. Aborting.');
+  process.exit(1);
+}
+
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');

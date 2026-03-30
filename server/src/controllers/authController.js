@@ -77,21 +77,18 @@ exports.refresh = async (req, res, next) => {
 };
 
 // POST /api/auth/logout
-exports.logout = async (req, res, next) => {
-  try {
-    const token = req.cookies?.refreshToken;
-    if (token) {
-      const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET).catch(() => null);
-      if (decoded) {
-        await User.findByIdAndUpdate(decoded.id, { refreshToken: null });
-      }
+exports.logout = async (req, res) => {
+  const token = req.cookies?.refreshToken;
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+      await User.findByIdAndUpdate(decoded.id, { refreshToken: null });
+    } catch {
+      // Invalid/expired token — still clear the cookie
     }
-    res.clearCookie('refreshToken', COOKIE_OPTS);
-    res.json({ success: true, message: 'Logged out' });
-  } catch (err) {
-    res.clearCookie('refreshToken', COOKIE_OPTS);
-    res.json({ success: true, message: 'Logged out' });
   }
+  res.clearCookie('refreshToken', COOKIE_OPTS);
+  res.json({ success: true, message: 'Logged out' });
 };
 
 // GET /api/auth/me
