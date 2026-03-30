@@ -24,7 +24,7 @@ const CATEGORY_NAMES = {
 export default function Services() {
   const [activeCategory, setActiveCategory] = useState('');
 
-  const { data: services = [], isLoading } = useQuery({
+  const { data: services = [], isLoading, isError, refetch } = useQuery({
     queryKey: ['services', activeCategory],
     queryFn: () => fetchServices(activeCategory || undefined),
   });
@@ -80,6 +80,11 @@ export default function Services() {
         <div className="container">
           {isLoading ? (
             <p className="caption" style={{ textAlign: 'center', padding: 'var(--sp-16) 0' }}>Loading…</p>
+          ) : isError ? (
+            <div style={{ textAlign: 'center', padding: 'var(--sp-16) 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--sp-6)' }}>
+              <p className="caption">Unable to load services. Please try again.</p>
+              <button className="btn btn-outline" onClick={() => refetch()}>Try Again</button>
+            </div>
           ) : (
             Object.entries(grouped).map(([category, items], i) => (
               <div
