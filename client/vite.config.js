@@ -1,8 +1,9 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import obfuscator from 'rollup-plugin-obfuscator';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [react()],
   resolve: {
     alias: {
@@ -29,6 +30,21 @@ export default defineConfig({
           query: ['@tanstack/react-query'],
         },
       },
+      plugins: mode === 'production'
+        ? [
+            obfuscator({
+              options: {
+                compact: true,
+                identifierNamesGenerator: 'hexadecimal',
+                stringArray: true,
+                stringArrayEncoding: ['base64'],
+                stringArrayThreshold: 0.75,
+                rotateStringArray: true,
+                shuffleStringArray: true,
+              },
+            }),
+          ]
+        : [],
     },
   },
-});
+}));
