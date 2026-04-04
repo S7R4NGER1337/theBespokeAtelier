@@ -80,7 +80,10 @@
 
   .nav {
     position: fixed;
-    inset: 72px 0 0 0;
+    top: 72px;
+    left: 0;
+    right: 0;
+    height: calc(100vh - 72px);
     background: var(--color-surface-lowest);
     flex-direction: column;
     justify-content: center;

@@ -111,11 +111,11 @@ export default function Services() {
                         <p className="caption">{svc.description}</p>
                       </div>
                       <span className="caption">{svc.duration} min</span>
-                      <span className={styles.price}>{formatPrice(svc.pricing.junior)}</span>
-                      <span className={styles.price}>{formatPrice(svc.pricing.senior)}</span>
-                      <span className={`${styles.price} ${styles.priceMaster}`}>
-                        {formatPrice(svc.pricing.master)}
-                      </span>
+                      <div className={styles.priceGroup}>
+                        <span className={styles.price} data-tier="Junior">{formatPrice(svc.pricing.junior)}</span>
+                        <span className={styles.price} data-tier="Senior">{formatPrice(svc.pricing.senior)}</span>
+                        <span className={`${styles.price} ${styles.priceMaster}`} data-tier="Master">{formatPrice(svc.pricing.master)}</span>
+                      </div>
                     </div>
                   ))}
                 </div>

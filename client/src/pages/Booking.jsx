@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -30,6 +30,12 @@ export default function Booking() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [confirmed, setConfirmed] = useState(false);
+
+  useEffect(() => {
+    if (window.matchMedia('(max-width: 768px)').matches) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [step]);
 
   const { data: services = [], isError: servicesError, refetch: refetchServices } = useQuery({ queryKey: ['services'], queryFn: () => fetchServices() });
   const { data: barbers = [], isError: barbersError, refetch: refetchBarbers } = useQuery({ queryKey: ['barbers'], queryFn: fetchBarbers });
