@@ -180,6 +180,7 @@
 }
 
 @media (max-width: 640px) {
+  .tableHeader { display: none; }
 
   .tableRow {
     display: grid;

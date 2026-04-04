@@ -96,14 +96,6 @@ export default function Services() {
                   {CATEGORY_NAMES[category] ?? category}
                 </h2>
                 <div className={styles.serviceTable}>
-                  {/* Header */}
-                  <div className={`${styles.tableRow} ${styles.tableHeader}`}>
-                    <span>Service</span>
-                    <span>Duration</span>
-                    <span className="label" style={{ color: 'var(--color-on-surface-variant)' }}>Junior</span>
-                    <span className="label" style={{ color: 'var(--color-on-surface-variant)' }}>Senior</span>
-                    <span className="label" style={{ color: 'var(--color-primary)' }}>Master</span>
-                  </div>
                   {items.map((svc) => (
                     <div key={svc._id} className={styles.tableRow}>
                       <div>
